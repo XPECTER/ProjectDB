@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="selectCardDefineList_Kr.aspx.cs" Inherits="selectCardDefineList_Kr" %>

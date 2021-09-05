@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="selectDungeonList_Kr.aspx.cs" Inherits="selectDungeonList_Kr" %>

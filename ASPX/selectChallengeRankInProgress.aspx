@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="selectChallengeRankInProgress.aspx.cs" Inherits="selectChallengeRankInProgress" %>

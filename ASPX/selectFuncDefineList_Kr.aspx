@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="selectFuncDefineList_Kr.aspx.cs" Inherits="selectFuncDefineList_Kr" %>

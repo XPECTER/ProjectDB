@@ -1,0 +1,12 @@
+﻿규칙
+
+1. 원하는 정보를 찾아 주는 페이지의 이름은 앞에 'select'를 붙인다.
+	ex ) selectDungeonList_Kr.aspx, selectZoneList_Kr.aspx 등
+
+2. 아이템(소모성, 티켓 등)을 사용했을 때 불러오는 페이지의 이름은 앞에 'use'를 붙인다.
+	ex ) useTicket.aspx 등
+
+3. 
+
+
+

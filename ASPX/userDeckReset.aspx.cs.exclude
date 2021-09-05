@@ -1,0 +1,37 @@
+﻿using System;
+using System.Data;
+using System.IO;
+using DatabaseConnection;
+using System.Text;
+
+// 덱 세팅 페이지에서 덱 초기화를 눌렀을 때 불러오는 페이지 입니다.
+public partial class userDeckReset : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // 유저 키와 덱 번호를 추출
+        string userKey = Request.Form["userKey"];
+        string deckNum = Request.Form["deckNum"];
+
+        // 쿼리문 작성
+        string query = "EXEC userDeckReset @userKey='" + userKey
+            + "', @deckNum = " + deckNum;
+
+        // 쿼리문 실행
+        DataTable dataTable = new DataTable();
+        dataTable = SetDatabase.SetDatabaseReader(query);
+        dataTable.TableName = "deckTbl";
+
+        // 속도 문제로 XML을 일반 STRING으로 대체
+        Response.Write(dataTable.Rows[0]["RESULT"].ToString());
+        dataTable.Clear();
+
+        // 쿼리문 실행 결과를 XML로 작성
+        //StringWriter stringWriter = new StringWriter();
+        //dataTable.WriteXml(stringWriter);
+        //Response.ContentType = "text/xml";
+        //Response.ContentEncoding = Encoding.UTF8;
+        //Response.Write(stringWriter);
+        //Response.Flush();
+    }
+}

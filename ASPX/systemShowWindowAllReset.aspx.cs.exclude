@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using WELLalgorithm;
+using DatabaseConnection;
+
+public partial class systemShowWindowAllReset : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // 별 개수는 
+        // 첫 번째, 3~5(확률 p = 0.1, 0.3, 0.6(순서대로 5성, 4성, 3성))
+        // 두 번째부터 여섯 번째까지 1~5(확률 p = 0.03, 0.10, 0.25, 0.37, 0.25(순서대로 5성, 4성, 3성, 2성, 1성))
+
+        uint[] rarity = new uint[] { 0, 0, 0, 0, 0, 0 };
+        uint randomNum = 0, userCount = 0, condition = 0; ;
+        List<string> cardDefineKey = new List<string>();
+        List<string> userKey = new List<string>();
+        
+        // 쿼리문 작성
+        string query = "SELECT COUNT(userKey) AS RESULT FROM userTbl";
+
+        // 쿼리문 실행
+        DataTable dataTable = new DataTable();
+        dataTable = SetDatabase.SetDatabaseReader(query);
+
+        // 쿼리문 실행 결과(전체 유저 수)를 저장
+        userCount = uint.Parse(dataTable.Rows[0]["RESULT"].ToString());
+
+        // 테이블 초기화 하고 다시 쿼리문 작성 후 실행
+        dataTable.Clear();
+        query = "SELECT userKey FROM userTbl";
+        dataTable = SetDatabase.SetDatabaseReader(query);
+
+        // 유저 수 만큼 반복
+        for (int i = 0; i < userCount; i++ )
+        {
+            // 유저 리스트에 하나씩 넣음
+            userKey.Add(dataTable.Rows[i]["userKey"].ToString());
+        }
+
+        for (int j = 0; j < userKey.Count; j++)
+        {
+        //    // 첫 번째 윈도우의 카드 등급 설정
+            randomNum = WELL512.Next(100);
+
+            if (randomNum >= 90)
+                rarity[0] = 5;
+            else if (randomNum < 90 && randomNum >= 60)
+                rarity[0] = 4;
+            else
+                rarity[0] = 3;
+
+            // 두 번째 부터 여섯 번째까지의 윈도우 카드 등급 설정
+            for (int i = 1; i < 6; i++)
+            {
+                randomNum = WELL512.Next(100);
+
+                if (randomNum >= 97)
+                    rarity[i] = 5;
+                else if (randomNum < 97 && randomNum >= 87)
+                    rarity[i] = 4;
+                else if (randomNum < 87 && randomNum >= 62)
+                    rarity[i] = 3;
+                else if (randomNum < 62 && randomNum >= 25)
+                    rarity[i] = 2;
+                else
+                    rarity[i] = 1;
+            }
+
+            //foreach (string s in userKey)
+            //{
+            //    Response.Write(s + "<br />");
+
+            //    for (int i = 0; i < 6; i++)
+            //        Response.Write(rarity[i] + "<br />");
+            //}
+
+            //Response.Write("<br />");
+            // -------------- 논리적 오류 없음 ---------------
+
+            for (int i = 0; i < 6; i++)
+            {
+                query = "SELECT COUNT(cardDefineKey) AS RESULT FROM cardDefineTbl_Kr WHERE rarity = " + rarity[i]
+                 + " AND cardLevel=1 AND cardUpgrade=0";
+
+                dataTable = SetDatabase.SetDatabaseReader(query);
+
+                condition = uint.Parse(dataTable.Rows[0]["RESULT"].ToString()) - 1;
+                randomNum = WELL512.Next(condition);
+
+                dataTable.Clear();
+                query = "EXEC showWindowShuffle @jobType = -1, @element = -1, @rarity = "
+                    + rarity[i] + ", @season = -1, @randomNum = " + randomNum;
+                dataTable = SetDatabase.SetDatabaseReader(query);
+
+                cardDefineKey.Add(dataTable.Rows[0]["cardDefineKey"].ToString());
+            }
+
+            query = "EXEC insertShowWindow @userKey = '" + userKey[j] + "', @cardDefineKey_1 = '" + cardDefineKey[0] +
+               "', @cardDefineKey_2 = '" + cardDefineKey[1] + "', @cardDefineKey_3 = '" + cardDefineKey[2] +
+               "', @cardDefineKey_4 = '" + cardDefineKey[3] + "', @cardDefineKey_5 = '" + cardDefineKey[4] +
+               "', @cardDefineKey_6 = '" + cardDefineKey[5] + "'";
+
+            dataTable.Clear();
+            dataTable = SetDatabase.SetDatabaseReader(query);
+        }
+    }
+}

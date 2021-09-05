@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="userDeckInformation_Kr.aspx.cs" Inherits="deckInformation_Kr" %>
